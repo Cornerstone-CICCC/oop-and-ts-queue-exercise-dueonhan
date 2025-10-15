@@ -4,20 +4,53 @@
 // techStack = needs to have at least React experience
 // Make sure to implement FIFO (First-In, First-Out)
 
-const Queue = require('../lib/Queue')
+const Queue = require("../lib/Queue");
 
-function processApplicants(queue) {
+function processApplicants(queue, targetEl) {
   // your code here
+  const tempQueue = new Queue();
+
+  while (!queue.isEmpty()) {
+    const removedEl = queue.dequeue();
+    if (
+      removedEl.yearsExperience >= 2 &&
+      removedEl.techStack.includes("React")
+    ) {
+      tempQueue.enqueue(removedEl);
+    }
+  }
+
+  while (!tempQueue.isEmpty()) {
+    queue.enqueue(tempQueue.dequeue());
+  }
+  //console.log(queue.printQueue());
+  return queue.printQueue();
 }
 
-const applicants = new Queue()
-applicants.enqueue({ name: "John Smith", yearsExperience: 3, techStack: ['Angular', 'Node'] })
-applicants.enqueue({ name: "Jane Smith", yearsExperience: 5, techStack: ['Node', 'React', 'Vue'] })
-applicants.enqueue({ name: "Joe Smith", yearsExperience: 1, techStack: ['React', 'Node'] })
-applicants.enqueue({ name: "Jack Smith", yearsExperience: 2, techStack: ['Node', 'MongoDB', 'React'] })
+const applicants = new Queue();
+applicants.enqueue({
+  name: "John Smith",
+  yearsExperience: 3,
+  techStack: ["Angular", "Node"],
+});
+applicants.enqueue({
+  name: "Jane Smith",
+  yearsExperience: 5,
+  techStack: ["Node", "React", "Vue"],
+});
+applicants.enqueue({
+  name: "Joe Smith",
+  yearsExperience: 1,
+  techStack: ["React", "Node"],
+});
+applicants.enqueue({
+  name: "Jack Smith",
+  yearsExperience: 2,
+  techStack: ["Node", "MongoDB", "React"],
+});
 
-processApplicants(applicants)
-console.log(applicants.printQueue())
+processApplicants(applicants);
+console.log(applicants.printQueue());
 // Expected output:
 // { name: "Jane Smith", yearsExperience: 5, techStack: ['Node', 'React', 'Vue'] }
 // { name: "Jack Smith", yearsExperience: 2, techStack: ['Node', 'MongoDB', 'React'] }
